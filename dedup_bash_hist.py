@@ -10,6 +10,7 @@ def pairwise(iterable):
 def remove_dups(history):
     from_end = 1
     total_dups = 0
+    print("Checking %d commands for duplicates..." % len(history))
     with tqdm.tqdm(total=len(history)-1) as progress:
         while from_end < len(history):
             target = len(history) - from_end
@@ -40,14 +41,17 @@ def main(filename, minlen):
         lines = f.read().splitlines()
         history = [(command.strip(), date)
                    for date, command in pairwise(lines)]
+    print("Processing %s with %d commands" % (filename, len(history)))
     if minlen:
         shorts = 0
+        print("Removing commands shorter than %d characters..." % minlen)
         for i in range(len(history) - 1, -1, -1):
             if len(history[i][0]) < minlen:
                 del history[i]
                 shorts += 1
-        print("Removed %d commands shorter than %d" % (shorts, minlen))
+        print("Removed %d commands %d chars or shorter." % (shorts, minlen-1))
     remove_dups(history)
+    print("De-duplicated history has %d commands." % len(history))
     save_to_file(history, filename)
 
 
