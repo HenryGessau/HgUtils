@@ -20,10 +20,10 @@ def remove_dups(history):
                 if history[i][0] == command:
                     del history[i]
                     dups += 1
-                    progress.update(1)
+                    progress.update()
             total_dups += dups
             from_end += 1
-            progress.update(1)
+            progress.update()
     print("Removed %d duplicates" % total_dups)
     return total_dups
 
