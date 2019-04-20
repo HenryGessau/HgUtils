@@ -10,7 +10,7 @@ def pairwise(iterable):
 def remove_dups(history):
     from_end = 1
     total_dups = 0
-    print("Checking %d commands for duplicates..." % len(history))
+    print(f"Checking {len(history)} commands for duplicates...")
     with tqdm.tqdm(total=len(history)-1) as progress:
         while from_end < len(history):
             target = len(history) - from_end
@@ -24,7 +24,7 @@ def remove_dups(history):
             total_dups += dups
             from_end += 1
             progress.update()
-    print("Removed %d duplicates" % total_dups)
+    print(f"Removed {total_dups} duplicates")
     return total_dups
 
 
@@ -32,7 +32,7 @@ def save_to_file(history, filename):
     filename += '.deduped'
     with open(filename, 'w') as f:
         for command, date in history:
-            f.write('%s\n%s\n' % (date, command))
+            f.write(f'{date}\n{command}\n')
     print("Wrote to", filename)
 
 
@@ -41,17 +41,17 @@ def main(filename, minlen):
         lines = f.read().splitlines()
         history = [(command.strip(), date)
                    for date, command in pairwise(lines)]
-    print("Processing %s with %d commands" % (filename, len(history)))
+    print(f"Processing {filename} with {len(history)} commands")
     if minlen:
         shorts = 0
-        print("Removing commands shorter than %d characters..." % minlen)
+        print(f"Removing commands shorter than {minlen} characters...")
         for i in range(len(history) - 1, -1, -1):
             if len(history[i][0]) < minlen:
                 del history[i]
                 shorts += 1
-        print("Removed %d commands %d chars or shorter." % (shorts, minlen-1))
+        print(f"Removed {shorts} commands {minlen-1} chars or shorter.")
     remove_dups(history)
-    print("De-duplicated history has %d commands." % len(history))
+    print(f"De-duplicated history has {len(history)} commands.")
     save_to_file(history, filename)
 
 
